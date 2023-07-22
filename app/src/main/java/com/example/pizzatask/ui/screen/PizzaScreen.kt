@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -42,12 +44,16 @@ fun PizzaScreen(viewModel: PizzaViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsState()
     val pagerState = rememberPagerState(initialPage = 1)
 
-    PizzaContent(state, pagerState = pagerState)
+    PizzaContent(state, pagerState = pagerState, viewModel)
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun PizzaContent(state: FoodUiState, pagerState: PagerState) {
+private fun PizzaContent(
+    state: FoodUiState,
+    pagerState: PagerState,
+    listener: PizzaInteractionsListener
+) {
 
     Column(
         modifier = Modifier
@@ -59,36 +65,42 @@ private fun PizzaContent(state: FoodUiState, pagerState: PagerState) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.4f),
+                .fillMaxHeight(1/3f),
             contentAlignment = Alignment.Center
         ) {
             Image(
                 painter = painterResource(id = R.drawable.plate),
                 contentDescription = "plate image",
-                alignment = Alignment.TopCenter,
-                modifier = Modifier.size(220.dp)
+                modifier = Modifier.fillMaxSize()
             )
             ViewPager(
-                images = listOf(
-                    R.drawable.bread_1,
-                    R.drawable.bread_2,
-                    R.drawable.bread_3,
-                    R.drawable.bread_4,
-                    R.drawable.bread_5,
-                ),
-                pagerState = pagerState
+                pagerState = pagerState,
+                updateCurrentPizza = listener::updateCurrentPizza,
+                foodUiState = state
             )
         }
         Text(
             text = "$16",
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 24.dp)
+            modifier = Modifier.padding(24.dp)
         )
-        LazyRow(  horizontalArrangement = Arrangement.spacedBy(8.dp),) {
-            itemsIndexed(state.pizzaSizes) { index, item ->
-                SizesItem(text = item.size)
-            }
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            SizesItem(
+                size = "S",
+                currentSize = state.pizzas[state.currentPizzaIndex].selectedPizzaSize,
+                updatePizzaSize = listener::updatePizzaSize
+            )
+            SizesItem(
+                size = "M",
+                currentSize = state.pizzas[state.currentPizzaIndex].selectedPizzaSize,
+                updatePizzaSize = listener::updatePizzaSize
+            )
+            SizesItem(
+                size = "L",
+                currentSize = state.pizzas[state.currentPizzaIndex].selectedPizzaSize,
+                updatePizzaSize = listener::updatePizzaSize
+            )
         }
         Text(
             text = "CUSTOMIZE YOUR PIZZA",
@@ -100,8 +112,8 @@ private fun PizzaContent(state: FoodUiState, pagerState: PagerState) {
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            itemsIndexed(state.pizza[0].pizzaIngredients) { index, item ->
-                IngredientItem(state = item)
+            items(state.pizzas[state.currentPizzaIndex].pizzaToppings) {item ->
+                ToppingItem(state = item, updateTopping = listener::updateToppings)
             }
         }
         Spacer(modifier = Modifier.weight(1f))

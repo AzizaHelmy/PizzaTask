@@ -19,11 +19,11 @@ import com.example.pizzatask.R
  */
 
 @Composable
-fun toolBar() {
+fun toolBar(modifier: Modifier=Modifier) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(horizontal = 16.dp, vertical = 20.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Icon(

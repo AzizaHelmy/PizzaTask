@@ -1,5 +1,6 @@
 package com.example.pizzatask.ui.screen
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -21,27 +22,36 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SizesItem(
     modifier: Modifier = Modifier,
-    text: String="M",
-    onClick: () -> Unit = {}
+    size: String,
+    currentSize: String,
+    updatePizzaSize: (PizzaSize) -> Unit,
 ) {
+    val itemElevation = animateDpAsState(targetValue = if (currentSize == size) 4.dp else 0.dp)
+
     Box(
         modifier = modifier
-            .shadow(
-                elevation = 2.dp,
-                shape = CircleShape)
             .size(50.dp)
+            .shadow(
+                elevation = itemElevation.value,
+                shape = CircleShape
+            )
             .background(
-                color = Color.White)
-            .clickable { onClick() }, contentAlignment = Alignment.Center
+                color = Color.White
+            )
+            .clickable {
+                when (size) {
+                    "S" -> updatePizzaSize(PizzaSize.Small)
+                    "M" -> updatePizzaSize(PizzaSize.Medium)
+                    "L" -> updatePizzaSize(PizzaSize.Large)
+                }
+            }, contentAlignment = Alignment.Center
     ) {
-        Text(text =text)
+        Text(text = size)
     }
 }
 
 @Preview
 @Composable
 fun PreviewSizesItem() {
-    SizesItem(
-        onClick = {}
-    )
+
 }

@@ -10,56 +10,106 @@ import kotlinx.coroutines.flow.update
  * Created by Aziza Helmy on 7/10/2023.
  */
 
-class PizzaViewModel : ViewModel() {
+class PizzaViewModel : ViewModel(), PizzaInteractionsListener {
 
     private val _state = MutableStateFlow(FoodUiState())
     val state = _state.asStateFlow()
 
     init {
-        getPizzaType()
-        getPizzaSize()
-        getPizzaIngredient()
+        getPizza()
+        getPizzaToppings()
     }
 
-    private fun getPizzaType() {
+    private fun getPizza() {
         _state.update {
             it.copy(
-                pizza = listOf(
-                    PizzaUiState(image = R.drawable.bread_1),
-                    PizzaUiState(image = R.drawable.bread_2),
-                    PizzaUiState(image = R.drawable.bread_3),
-                    PizzaUiState(image = R.drawable.bread_4),
-                    PizzaUiState(image = R.drawable.bread_5),
+                pizzas = listOf(
+                    PizzaUiState(bread = R.drawable.bread_1),
+                    PizzaUiState(bread = R.drawable.bread_2),
+                    PizzaUiState(bread = R.drawable.bread_3),
+                    PizzaUiState(bread = R.drawable.bread_4),
+                    PizzaUiState(bread = R.drawable.bread_5),
                 )
             )
         }
     }
 
-    private fun getPizzaIngredient() {
+    override fun updateCurrentPizza(index: Int) {
+        _state.update {
+            it.copy(currentPizzaIndex = index)
+        }
+    }
+
+    override fun updateToppings(type: Topping, isSelected: Boolean) {
+        _state.update {
+            it.copy(pizzas = it.pizzas.mapIndexed { index, pizzaUiState ->
+                if (index == state.value.currentPizzaIndex) {
+                    pizzaUiState.copy(pizzaToppings = pizzaUiState.pizzaToppings.map { topping ->
+                        if (topping.type == type) {
+                            topping.copy(isSelected = isSelected)
+                        } else {
+                            topping
+                        }
+                    })
+                } else {
+                    pizzaUiState
+                }
+            })
+        }
+    }
+
+    override fun updatePizzaSize(size: PizzaSize) {
+        _state.update {
+            it.copy(pizzas = it.pizzas.mapIndexed { index, pizzaUiState ->
+                if (index == state.value.currentPizzaIndex) {
+                    val currentSize = when (size) {
+                        PizzaSize.Large -> "L"
+                        PizzaSize.Medium -> "M"
+                        PizzaSize.Small -> "S"
+                    }
+                    pizzaUiState.copy(size = size, selectedPizzaSize = currentSize)
+                } else {
+                    pizzaUiState
+                }
+            })
+        }
+    }
+
+    private fun getPizzaToppings() {
         _state.update { foodUiState ->
-            foodUiState.copy(pizza = foodUiState.pizza.map {
+            foodUiState.copy(pizzas = foodUiState.pizzas.map {
                 it.copy(
-                    pizzaIngredients = listOf(
-                        IngredientUiState(id = 0, image = R.drawable.onion_1),
-                        IngredientUiState(id = 0, image = R.drawable.broccoli_1),
-                        IngredientUiState(id = 0, image = R.drawable.mushroom_1),
-                        IngredientUiState(id = 0, image = R.drawable.sausage_1),
-                        IngredientUiState(id = 0, image = R.drawable.basil_3),
+                    pizzaToppings = listOf(
+                        ToppingUiState(
+                            type = Topping.ONION,
+                            singleToppingImage = R.drawable.onion_1,
+                            multiToppingImages = R.drawable.onion
+                        ),
+                        ToppingUiState(
+                            type = Topping.BROCCOLI,
+                            singleToppingImage = R.drawable.broccoli_1,
+                            multiToppingImages = R.drawable.broccoli
+                        ),
+                        ToppingUiState(
+                            type = Topping.MUSHROOM,
+                            singleToppingImage = R.drawable.mushroom_1,
+                            multiToppingImages = R.drawable.mushroom
+                        ),
+                        ToppingUiState(
+                            type = Topping.SAUSAGE,
+                            singleToppingImage = R.drawable.sausage_1,
+                            multiToppingImages = R.drawable.sausage
+                        ),
+                        ToppingUiState(
+                            type = Topping.BASIL,
+                            singleToppingImage = R.drawable.basil_3,
+                            multiToppingImages = R.drawable.basil
+                        ),
                     )
                 )
             })
         }
     }
 
-    private fun getPizzaSize() {
-        _state.update {
-            it.copy(
-                pizzaSizes = listOf(
-                    PizzaSizeUiState(size = "S", isSelected = false),
-                    PizzaSizeUiState(size = "M", isSelected = false),
-                    PizzaSizeUiState(size = "L", isSelected = true),
-                )
-            )
-        }
-    }
+
 }
