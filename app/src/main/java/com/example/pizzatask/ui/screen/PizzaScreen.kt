@@ -2,9 +2,9 @@ package com.example.pizzatask.ui.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,15 +35,19 @@ import com.example.pizzatask.R
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PizzaScreen(viewModel: PizzaViewModel = hiltViewModel()) {
+
+//    val systemUiControl = rememberSystemUiController()
+//    systemUiControl.setStatusBarColor(color = Transparent, darkIcons = true)
+
     val state by viewModel.state.collectAsState()
     val pagerState = rememberPagerState(initialPage = 1)
 
-    PizzaContent(FoodUiState(), PizzaUiState(), pagerState = pagerState)
+    PizzaContent(state, pagerState = pagerState)
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun PizzaContent(state: FoodUiState, fake: PizzaUiState, pagerState: PagerState) {
+private fun PizzaContent(state: FoodUiState, pagerState: PagerState) {
 
     Column(
         modifier = Modifier
@@ -79,17 +83,24 @@ private fun PizzaContent(state: FoodUiState, fake: PizzaUiState, pagerState: Pag
             text = "$16",
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(24.dp)
+            modifier = Modifier.padding(bottom = 24.dp)
         )
-
+        LazyRow(  horizontalArrangement = Arrangement.spacedBy(8.dp),) {
+            itemsIndexed(state.pizzaSizes) { index, item ->
+                SizesItem(text = item.size)
+            }
+        }
         Text(
             text = "CUSTOMIZE YOUR PIZZA",
             modifier = Modifier
-                .padding(top = 64.dp, start = 16.dp)
+                .padding(top = 46.dp, start = 16.dp, bottom = 24.dp)
                 .align(alignment = Alignment.Start)
         )
-        LazyRow() {
-            itemsIndexed(fake.pizzaIngredients) { index, item ->
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            itemsIndexed(state.pizza[0].pizzaIngredients) { index, item ->
                 IngredientItem(state = item)
             }
         }
@@ -97,21 +108,11 @@ private fun PizzaContent(state: FoodUiState, fake: PizzaUiState, pagerState: Pag
         ButtonDefault(
             modifier = Modifier.Companion
                 .align(Alignment.CenterHorizontally)
-                .padding(bottom = 16.dp)
+                .padding(bottom = 40.dp)
         )
     }
 }
 
-
-@Composable
-fun PizzaScaffold(
-    header: (@Composable () -> Unit)? = null,
-    content: @Composable (paddingValues: PaddingValues) -> Unit
-) {
-    header?.invoke()
-    content(PaddingValues(top = 0.dp))
-
-}
 
 @Preview(showSystemUi = true)
 @Composable

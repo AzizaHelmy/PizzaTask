@@ -40,7 +40,11 @@ class PizzaViewModel : ViewModel() {
             foodUiState.copy(pizza = foodUiState.pizza.map {
                 it.copy(
                     pizzaIngredients = listOf(
-                        IngredientUiState(id = 0, image = R.drawable.onion)
+                        IngredientUiState(id = 0, image = R.drawable.onion_1),
+                        IngredientUiState(id = 0, image = R.drawable.broccoli_1),
+                        IngredientUiState(id = 0, image = R.drawable.mushroom_1),
+                        IngredientUiState(id = 0, image = R.drawable.sausage_1),
+                        IngredientUiState(id = 0, image = R.drawable.basil_3),
                     )
                 )
             })

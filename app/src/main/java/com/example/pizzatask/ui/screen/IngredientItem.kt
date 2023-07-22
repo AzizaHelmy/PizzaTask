@@ -35,7 +35,7 @@ fun IngredientItem(
         contentAlignment = Alignment.Center
     ) {
         Image(
-            modifier = Modifier.size(32.dp),
+            modifier = Modifier.size(40.dp),
             painter = painterResource(id = state.image),
             contentDescription = "ingredients"
         )

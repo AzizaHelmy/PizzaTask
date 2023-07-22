@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pizzatask.R
+import com.example.pizzatask.ui.theme.Brown
 
 /**
  * Created by Aziza Helmy on 7/20/2023.
@@ -23,7 +24,7 @@ import com.example.pizzatask.R
 fun ButtonDefault(modifier: Modifier = Modifier) {
     Button(
         modifier = modifier,
-        colors = ButtonDefaults.buttonColors(Color.Black),
+        colors = ButtonDefaults.buttonColors(Brown),
         shape = RoundedCornerShape(8.dp),
         onClick = {}
     ) {
