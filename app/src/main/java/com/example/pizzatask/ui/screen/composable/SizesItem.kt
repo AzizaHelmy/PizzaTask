@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 /**
  * Created by Aziza Helmy on 7/21/2023.
@@ -36,7 +37,7 @@ fun SizesItem(
                 shape = CircleShape
             )
             .background(
-                color = Color.White
+                color = Color.White, shape = CircleShape
             )
             .clickable {
                 when (size) {
@@ -46,7 +47,7 @@ fun SizesItem(
                 }
             }, contentAlignment = Alignment.Center
     ) {
-        Text(text = size)
+        Text(text = size, fontSize = 16.sp)
     }
 }
 

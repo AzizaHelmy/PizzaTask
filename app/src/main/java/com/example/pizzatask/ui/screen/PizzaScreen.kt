@@ -80,9 +80,9 @@ private fun PizzaContent(
             )
         }
         Text(
-            text = "$16",
-            fontSize = 30.sp,
-            fontWeight = FontWeight.Bold,
+            text = state.pizzas[state.currentPizzaIndex].price,
+            fontSize = 26.sp,
+            fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(24.dp)
         )
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

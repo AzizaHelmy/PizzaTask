@@ -24,11 +24,11 @@ class PizzaViewModel : ViewModel(), PizzaInteractionsListener {
         _state.update {
             it.copy(
                 pizzas = listOf(
-                    PizzaUiState(bread = R.drawable.bread_1),
-                    PizzaUiState(bread = R.drawable.bread_2),
-                    PizzaUiState(bread = R.drawable.bread_3),
-                    PizzaUiState(bread = R.drawable.bread_4),
-                    PizzaUiState(bread = R.drawable.bread_5),
+                    PizzaUiState(bread = R.drawable.bread_1,price="$16"),
+                    PizzaUiState(bread = R.drawable.bread_2,price="$22"),
+                    PizzaUiState(bread = R.drawable.bread_3,price="$15"),
+                    PizzaUiState(bread = R.drawable.bread_4,price="$35"),
+                    PizzaUiState(bread = R.drawable.bread_5,price="$10"),
                 )
             )
         }
